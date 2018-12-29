@@ -1,0 +1,1042 @@
+\documentclass[twoside, draft]{article}
+\usepackage{comment}
+\usepackage{units}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage[%
+    %a5paper,
+    papersize={5.5in,8.5in},
+    margin=0.75in,
+    top=0.75in,
+    bottom=0.75in,
+    %twoside
+    ]{geometry}
+
+\usepackage{ifdraft}
+\usepackage{makeidx}
+
+
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tcolorbox}
+
+\raggedcolumns
+\setlength{\multicolsep}{0pt}
+\setlength{\columnseprule}{1pt}
+
+\makeatletter
+
+\newif\if@mainmatter \@mainmattertrue
+
+%% Borrowed from book.cls
+\newcommand\frontmatter{%
+    \cleardoublepage
+  \@mainmatterfalse
+  \pagenumbering{roman}}
+\newcommand\mainmatter{%
+    \cleardoublepage
+  \@mainmattertrue
+  \pagenumbering{arabic}}
+\makeatother
+
+%% Vary the colors at will
+
+\definecolor{vegcolor}{rgb}{0,0.5,0.2}
+\definecolor{frzcolor}{rgb}{0,0,1}
+\definecolor{vgncolor}{rgb}{0.5, 0, 0.5}
+
+% Your "recipes.sty" package starts here:
+%% Thanks to alephzero for the excellent start:
+
+\newcommand{\recipe}[2][]{%
+    \newpage
+    \lhead{}%
+    \chead{}%
+    \rhead{}%
+    \lfoot{}%
+    \rfoot{}%
+    \subsection{#2}%
+    \label{sec:#2}% in case I want to \pageref in the section opener
+    \index{#2}
+    \if###1##%
+    \else
+        \begin{center}
+            \parbox{0.75\linewidth}{\raggedright\itshape#1}%
+        \end{center}
+    \fi
+}
+\newcommand{\serves}[2][Serves]{%
+    \chead{#1 #2}}
+\newcommand{\vegetarian}{%
+    \rhead{\large\color{vegcolor}\textbf{V}}}
+
+%% Optional arguments for alternate names for these:
+\newcommand{\preptime}[2][Prep time]{%
+    \lfoot{#1: #2}%
+}
+\newcommand{\cooktime}[2][Cook time]{%
+    \rfoot{#1: #2}%
+}
+
+
+%% Optional argument is the width of the graphic, default = 1in
+\newcommand{\showit}[3][1in]{%
+    \begin{center}
+        \bigskip
+            \includegraphics[width=#1]{#2}%
+            \par
+            \medskip
+            \emph{#3}
+            \par
+        \end{center}%
+    }
+
+%% Optional argument for a  heading within the ingredients section
+\newcommand{\ingredients}[1][]{%
+    \if###1##%
+        {\color{red}\Large\textbf{Ingredients}}%
+    \else
+        \emph{#1}%
+    \fi
+}
+
+%% Use \obeylines to minimize markup
+\newenvironment{ingreds}{%
+    \parindent0pt
+    \noindent
+    \ingredients
+    \par
+    \smallskip
+    \begin{multicols}{2}
+    \leftskip1em
+    \rightskip0pt plus 3em
+    \parskip=0.25em
+    \obeylines
+    \everypar={\hangindent2em}
+}{%
+    \end{multicols}%
+    \medskip
+}
+
+\newcounter{stepnum}
+
+%% Optional argument for an italicized pre-step
+%% Also use obeylines to minimize markup here as well
+\newenvironment{method}[1][]{%
+    \setcounter{stepnum}{0}
+    \noindent
+    {\color{red}\Large\textbf{Instructions}}%
+    \par
+    \smallskip
+    \if###1##%
+    \else
+        \noindent
+        \emph{#1}
+        \par
+    \fi
+    \begingroup
+    \parindent0pt
+    \parskip0.25em
+        \leftskip2em
+    \everypar={\llap{\stepcounter{stepnum}\hbox to2em{\thestepnum.\hfill}}}
+}{%
+    \par
+    \endgroup}
+
+\pagestyle{fancy}
+
+%% ----- My additions -----
+% temperature formatting
+\newcommand{\ctemp}[1]{%
+    $#1^\circ$C}
+\newcommand{\ftemp}[1]{%
+    $#1^\circ$F}
+
+% new tags
+\newcommand{\vegan}{%
+    \rhead{\large\color{vegcolor}\textbf{V}\color{black}/\color{vgncolor}\textbf{V}}}
+\newcommand{\freezerfriendly}{%
+    \lhead{\large\color{frzcolor}\textbf{FF}}}
+
+%
+\makeatletter
+\def\emptypage@emptypage{%
+    \thispagestyle{plain}
+    \hbox{}%
+     \vspace*{\fill}
+     \begin{center}
+     \ifdraft{This page would be intentionally left blank\\ if I didn't need to know it was.}{}
+     \end{center}
+     \vspace{\fill}
+     \newpage%
+}%
+% this version of cleardoublepage also properly clears the page style
+\def\cleardoublepage{%
+        \clearpage%
+        \if@twoside%
+            \ifodd\c@page%
+                % do nothing
+            \else%
+                \emptypage@emptypage%
+            \fi%
+        \fi%
+    }%
+\makeatother
+
+\newcommand{\chapter}[1]{
+    %uses the \cleardoublepage above
+    \cleardoublepage
+    \rfoot{}
+    \lfoot{}
+    \chead{}
+    \lhead{}
+    \rhead{\textsc{#1}}
+    \section{#1}
+}
+
+\newtcolorbox{tips}{title=\textit{Recipe tips}}
+
+% End of "recipes.sty"
+
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{textcomp}
+% MUST load ed, then enumitem, then draftwatermark. Why? Who knows.
+% actually, I know. ed imports paralist, which can't be loaded after enumitem
+\usepackage{ed}
+\usepackage{enumitem}
+\ifdraft{\usepackage[firstpage]{draftwatermark}}{}
+\makeindex
+
+\begin{document}
+\setcounter{secnumdepth}{0}
+\frontmatter
+\title{Recipes}% really need a better title
+\author{Compiled by T\&A}
+\maketitle
+\bigskip
+\begin{center}
+1st Edition, Preview 8
+\end{center}
+\newpage
+
+% IDEA possibly move this section after the TOC
+\chapter{About this book}
+This book was lovingly typeset using \LaTeX~and
+a modified version of the layout found at
+\url{https://tex.stackexchange.com/a/366262}.
+
+\smallskip
+Several recipes have tags in the page headers.
+{\color{frzcolor}FF} stands for freezer-friendly,
+meaning the item can be frozen indefinitely 
+(as far as we know) and thawed later.
+These are often good choices for bulk cooking.
+{\color{vegcolor}V} and {\color{vgncolor}V} denote
+vegetarian and vegan recipes, respectively.
+
+\smallskip
+A quick word on release editions:
+if you're holding a book that says
+``Edition $x$, Preview $y$'' on the title page,
+then I don't know how you got it,
+but it probably wasn't one of us.
+Preview editions are considered 
+interim digital versions only 
+and may contain incomplete recipes, misspellings, 
+or other such oddities.
+
+\smallskip
+With that, enjoy the book, and happy cooking!
+
+\bigskip ---T\&A
+
+\newpage\rhead{}\tableofcontents
+
+\mainmatter
+
+\chapter{Sauces and Seasonings}
+
+\recipe[]{Taco Seasoning}
+\begin{ingreds}
+  1 tbsp chili powder
+  1 \nicefrac{1}{2} tsp ground cumin
+  1 tsp salt
+  1 tsp black pepper
+  \nicefrac{1}{2} tsp paprika
+  \nicefrac{1}{4} tsp garlic powder
+  \nicefrac{1}{4} tsp onion powder
+  \nicefrac{1}{4} tsp crushed red pepper
+  \nicefrac{1}{4} tsp dried oregano
+\end{ingreds}
+
+\begin{method}
+Mix all ingredients in a small bowl until well mixed.
+\end{method}
+
+\chapter{Appetizers and Sides}
+%Some of these items can be made into meals in their own right.
+
+\recipe[Homemade cheese crackers -- what's not to love?]{Cheddar Cheese Coins*}
+\serves{10-12}
+\preptime{30 minutes}
+\cooktime{1 hour 50 minutes}
+\vegetarian
+\freezerfriendly
+\begin{ingreds}
+  8 oz extra-sharp cheddar cheese, shredded
+  1 \nicefrac{1}{2} cups all-purpose flour
+  1 tbsp cornstarch
+  \nicefrac{1}{2} tsp salt
+  \nicefrac{1}{4} tsp cayenne pepper
+  \nicefrac{1}{4} tsp paprika
+  8 tbsp unsalted butter, cut into 8 pieces and chilled
+  3 tbsp water
+\end{ingreds}
+
+\begin{method}[Adjust oven rack to upper middle and preheat to \ftemp{350}.]
+  Process cheese, flour, cornstarch, salt, cayenne, and paprika
+  in food processor until combined, about 30 seconds.
+  Scatter butter pieces over top and process until
+  mixture resembles wet sand, about 20 seconds.
+  Add water and process until dough forms a ball, about 10 seconds.
+  Transfer dough to counter and divide in half.
+  Roll each half into a 10-inch log, wrapin plastic wrap,
+  and refrigerate until firm, at least 1 hour.
+
+  Line 2 rimmed baking sheets with parchment paper.
+  Unwrap logs and slice into \nicefrac{1}{4}-inch-thick coins,
+  giving dough a quarter turn after each slice
+  to keep the log round.
+  Place coins 2 inches apart on the prepared baking sheets.
+
+  Bake until light golden around edges, 22 to 28 minutes,
+  switching and rotating sheets halfway through baking.
+  Let coins cool completely on sheets before serving.
+\end{method}
+
+
+\recipe[These Filipino spring rolls can be made with a variety of meats, but we prefer to make them with shrimp, as below.]{Fried Lumpia}
+\serves{8}
+\preptime{}
+\cooktime{}
+\freezerfriendly
+\begin{ingreds}
+  1 tsp vegetable oil
+  3 cloves garlic, minced
+  \nicefrac{1}{2} cup onions, chopped
+  1 lb small shrimp (or ground meat)
+  1 tsp salt
+  1 tsp black pepper
+  1 tsp garlic powder
+  1 tsp soy sauce
+  3 cups cabbage, shredded
+  2 cups carrots, shredded
+  1 package lumpia wrappers
+  egg wash
+  oil to fry
+\end{ingreds}
+
+\begin{method}
+  Saut\'e minced garlic and onions in vegetable oil.
+  Add meat and heat until fully cooked.
+
+  Stir in cabbage, carrots, salt, pepper, garlic powder,
+  and soy sauce.
+  Cook until cabbage just begins to cook down.
+  Drain and allow to cool.
+
+  Spoon filling onto wrappers,
+  then roll and seal with egg wash.
+
+  When ready to fry, heat frying oil in a pan.
+  Deep fry rolls until well-browned and crispy.
+  Serve hot.
+\end{method}
+\begin{tips}
+  The rolled lumpia can be kept frozen
+  until ready to fry.
+\end{tips}
+
+%%
+\chapter{Meat-free Mains}
+\begin{comment} % TODO finish chapter intro
+We love meats, but meats are expensive,
+sometimes making up as much as half the total
+cost of our weekly grocery trip.
+Vegetarian options can be as much about practicality
+as about lifestyle choices.
+\end{comment}
+
+\recipe[So tasty you won't even notice it has no meat.]{Black Beans and Quinoa}
+\vegan
+\serves{4}
+\preptime{10 minutes}
+\cooktime{30 minutes}
+\begin{ingreds}
+  1 tbsp olive oil
+  1 medium sweet or yellow onion, diced
+  2 cloves garlic, minced
+  \nicefrac{3}{4} cup uncooked quinoa, rinsed
+  1 (15 oz) can black beans, drained and rinsed
+  1 tsp chili powder
+  1 tsp cumin
+  \nicefrac{1}{4} tsp crushed red pepper flakes
+  \nicefrac{1}{2} tsp black pepper
+  salt to taste
+  1 (10 oz) can original Rotel
+  \nicefrac{1}{2} cup fresh cilantro, chopped
+  1 \nicefrac{3}{4} cup vegetable broth
+\end{ingreds}
+
+\begin{method}
+  In a large skillet, heat olive oil on medium-low heat
+  and saut\'e diced onions until tender, about 4 minutes.
+  Add garlic and saut\'e one additional minute.
+  Add the remaining ingredients in the order listed above.
+
+  Cover and bring to a boil.
+  Reduce heat to a low boil and cook 15-20 minutes
+  or until liquid is absorbed.
+  Remove from heat and allow to sit covered for 5 minutes before serving.
+
+  Fluff quinoa with a large spoon and serve.
+\end{method}
+\begin{tips}
+  Don't forget to rinse the quinoa!
+  Dry quinoa has a bitter coating that needs
+  to be removed before cooking.
+\end{tips}
+
+%%
+\chapter{Beef and Pork Mains}
+\begin{comment} % chatper intro
+  Naturally, all of these are delicious.
+  Need I say more?
+  % say something about when to use lean meats, I guess
+\end{comment}
+
+\recipe[]{Beef-Stuffed Bell Peppers}
+\serves{4}
+\preptime{15 minutes}
+\cooktime{40 minutes}
+\freezerfriendly
+\begin{ingreds}
+  4 red bell peppers, seeded with tops and membranes removed
+  1 tbsp olive oil, plus extra for greasing the peppers
+  1 lb extra-lean ground beef
+  1 sweet onion, chopped
+  1 cup mushrooms, chopped
+  2 tsp minced garlic
+  1 cup shredded spinach
+  1 cup cooked quinoa
+  salt and pepper
+\end{ingreds}
+\begin{method}[Preheat oven to \ftemp{350}.]
+  Rub pepper with olive oil and place them
+  hollow side down in baking pan.
+
+  Bake the peppers for 10 minutes, until slightly softened,
+  and remove them from the oven.
+  Flip them hollow side up and set aside.
+
+  Heat the olive oil in a large skillet over
+  medium-high heat.
+
+  Add the ground beef and saut\'e for about 10 minutes,
+  until it is cooked through.
+  Stir in the onion, mushrooms, and garlic and saut\'e
+  for about 6 minutes, until translucent.
+
+  Remove the skillet from the heat and stir in
+  the spinach and quinoa.
+  Season the filling with salt and pepper.
+
+  Spoon the filling into the red peppers
+  and return the baking dish to the oven.
+  Bake 15 minutes and serve.
+\end{method}
+\begin{tips}
+  Peppers can be packed in freezer bags and frozen
+  after filling.
+  Just thaw them in the refrigerator
+  and bake for 20-25 minutes at \ftemp{350}.
+\end{tips}
+
+\recipe[Excellent served on taco boats or in a bowl with tortilla chips on the side.]{Chili}
+\serves{8}
+\freezerfriendly
+\preptime{15 minutes}
+\cooktime{2.5 hours}
+\begin{ingreds}
+  1 \nicefrac{1}{2} lb ground beef
+  2 garlic buds, minced
+  1 large onion, chopped
+  1 tbsp butter
+  1 tsp ground cumin
+  2 tsp chili powder
+  1 tsp paprika
+  1 \nicefrac{1}{2} tsp crushed red pepper
+  1 (10 oz) can tomato sauce
+  2 large cans red kidney beans
+  2 large cans black beans
+  2 cans whole kernel corn, drained
+\end{ingreds}
+
+\begin{method}
+  Saut\'e ground beef, onion, and garlic in butter.
+  Add other ingredients and cook slowly for at least 2 hours.
+\end{method}
+
+\recipe[Beef jerky with a hint of root beer and chipotle.]{Root Beer Jerky}
+
+\begin{ingreds}
+  3 cups root beer
+  \nicefrac{1}{3} cup soy sauce
+  1 tsp chipotle powder
+  1 tsp paprika
+  1 tsp granulated garlic
+  \nicefrac{1}{4} tsp liquid hickory smoke
+  1 lb London broil strips, or other lean beef strips
+\end{ingreds}
+
+\begin{method}
+  Mix all ingredients except the meat into a saucepan
+  and heat over medium-high heat.
+  Cook until the mixture reduces by half, 15 to 20 minutes.
+  Remove from the heat and let cool completely.
+
+  Pour the marinade into a 1-gallon resealable plastic
+  freezer bag and add the meat strips to the marinade.
+  Mix the strips around so they get completely coated with the marinade.
+
+  Remove as much air as possible from the bag,
+  seal, and place it in the refrigerator for 4 hours.
+  During the marinating time, remove the bag
+  from the refrigerator and work the meat around
+  so the marinade is fully incorporated into it.
+
+  Remove the strips from the marinade and arrrange
+  in a single layer in a dehydrator.
+  Dry at \ftemp{158} for 4-6 hours, or until done
+  (jerky is dark and bends without snapping).
+\end{method}
+
+\recipe[Use pre-cut stew meat to save prep time on this Asian-inspired dish.]{Slow Cooker Beef and Broccoli}
+\serves{4-6}
+%\preptime{}
+\cooktime{4.5 hours}
+\begin{ingreds}
+  1 lb beef stew meat
+  1 cup beef broth
+  \nicefrac{1}{2} cup soy sauce
+  1 tbsp sesame oil
+  4 cloves garlic, minced
+  \nicefrac{1}{4} cup brown sugar
+  1 large head of broccoli, cut into pieces
+  \nicefrac{1}{4} cup water
+  \nicefrac{1}{4} cup cornstarch
+\end{ingreds}
+
+\begin{method}
+  Combine broth, soy sauce, sesame oil, garlic,
+  and brown sugar in a slow cooker.
+  Mix well and cook on low for 4 hours.
+
+  Mix cornstarch and water in a small bowl.
+  Add to slow cooker with broccoli pieces, stirring.
+  Cook on low for another 30 minutes.
+
+  Serve over rice.
+\end{method}
+
+%%
+\chapter{Chicken and Turkey Mains}
+\recipe[Served atop jasmine rice and green beans.]{Sweet-As-Honey Chicken}
+\serves{2}
+\preptime{5 minutes}
+\cooktime{30 minutes}
+\begin{ingreds}
+  1 tbsp vegetable oil
+  1 tsp minced garlic
+  1 lime, cut into wedges
+  1 thumb ginger, peeled and minced
+  \nicefrac{1}{2} cup jasmine rice
+  2 chicken breasts, 6 oz each
+  1 \nicefrac{1}{2} tbsp white wine vinegar
+  1 tbsp soy sauce
+  1 pouch chicken stock concentrate
+  1 oz honey
+  6 oz green beans
+  salt and pepper
+\end{ingreds}
+\begin{method}
+  Bring 1 cup water and a pinch of salt
+  to a boil in a small pot.
+  Once water boils, add rice to pot.
+  Cover, lower heat, and reduce to a gentle simmer.
+  Cook until tender, about 15 minutes.
+
+  Meanwhile, heat a drizzle of oil in a large pan
+  over medium-high heat.
+  Season chicken all over with salt and pepper.
+  Add to pan and cook until no longer pink
+  in the center, about 4-5 minutes per side.
+  Remove from pan and set aside.
+
+  Reduce heat under pan to medium-low
+  and add a drizzle of oil.
+  Saut\'e minced ginger and garlic until
+  softened and fragrant, about 1 minute.
+  Pour in vinegar and let reduce
+  until almost dry and evaporated.
+
+  Stir soy sauce, 2 tbsp water, stock concentrate,
+  and honey into same pan.
+  Let simmer until mixture thickens to
+  a glaze-like consistency, 2-3 minutes.
+  Remove from heat, then return chicken to pan
+  and toss to coat.
+  Set aside.
+
+  Place green beans in a medium, microwave-safe bowl
+  with a splash of water.
+  Cover bowl with plastic wrap and poke
+  a few holes in wrap.
+  Microwave on high until just tender, about 2 minutes.
+  Meanwhile, heat a drizzle of oil in a medium pan
+  over medium-high heat.
+  Thoroughly drain green beans, then add to pan.
+  Cook, tossing occasionally, until lightly crisped, 3-5 minutes.
+  Season with salt, pepper, and a squeeze of lime.
+
+  Divide rice between plates;
+  top with green beans and chicken.
+  Serve with remaining lime wedges on the side for squeezing over.
+\end{method}
+
+
+
+\recipe[Tasty vegetable-filled turkey burgers.]{Tender Turkey Burgers}
+\freezerfriendly
+\serves{4}
+\cooktime[Bake time]{30 minutes}
+\preptime{15 minutes}
+\begin{ingreds}
+  2 tsp olive oil
+  \nicefrac{1}{2} sweet onion, chopped
+  \nicefrac{1}{2} red bell pepper, chopped
+  1 celery stalk, finely chopped
+  2 tsp minced garlic
+  1 \nicefrac{1}{2} lb ground turkey
+  dash sea salt
+  dash freshly ground black pepper
+  \columnbreak
+  Olive oil spray
+  4 sprouted grain buns
+  Boston lettuce leaves, for garnish (optional)
+  Red onion, thinly sliced, for garnish (optional)
+  Tomato, sliced, for garnish (optional)
+\end{ingreds}
+
+\begin{method}[Preheat the oven to \ftemp{400}.]
+  Heat the olive oil in a medium skillet over medium-high heat.
+  Add the onion, red bell pepper, celery, and garlic
+  and saut\'e until softened, about 4 minutes.
+
+  Transfer the cooked vegetables to a medium bowl
+  and add the turkey, salt, and pepper.
+  Mix the ingredients together and divide the
+  turkey mixture into four portions.
+
+  Shape the portions into four patties about
+  \nicefrac{3}{4} inch thick.
+  Line a baking dish with parchment and place
+  the turkey burgers on the dish in one layer.
+  Lightly spray the patties with olive oil.
+
+  Bake the burgers until they are golden and
+  cooked through, about 25 minutes.
+  Serve the burgers on buns topped with lettuce,
+  onion, and tomato.
+\end{method}
+
+\begin{tips}
+  Patties can be kept in the freezer --
+  just put some parchment paper between them
+  before wrapping them up.
+
+  \medskip
+  Also, don't be afraid to spread some of the veggies
+  around the baking tray before putting it into the oven.
+\end{tips}
+
+%%
+\chapter{Soups and Pasta Sauces}
+\begin{comment}
+Pasta is cheap, and soups can be prepared
+in rather large batches --
+perfect when you're on a college student budget (we are).
+\end{comment}
+
+\recipe[This recipe takes a while, so start it in the morning and leave it to cook all day.]{Bean Soup}
+\serves{6}
+\freezerfriendly
+\cooktime{8 hours}
+\preptime{20 minutes}
+\begin{ingreds}
+  1 bag 15 bean soup mix
+  1 (32 oz) box chicken broth
+  water
+  1 ham bone with meat
+  1 package Conecuh sausage
+  1 onion, chopped
+\end{ingreds}
+
+\begin{method}
+  Saut\'e sausage and onion until sausage
+  is cooked and onion is soft.
+
+  Place ham bone, sausage, and beans into slow cooker.
+  Cover with chicken broth and water.
+  Add half of the seasoning package from the soup mix bag and mix well.
+
+  Cook on low for 8 hours.
+\end{method}
+
+\recipe[Easily improvised, this recipe serves as a nice base upon which to build.]{Chicken Soup}
+\serves{}
+\preptime{}
+\cooktime{}
+\freezerfriendly
+\begin{ingreds}
+  1 lb chicken breasts, cooked (may be shredded or chopped)
+  1 tbsp butter
+  2 stalks celery, chopped
+  1 cup carrots, shredded
+  1 package egg noodles
+  4 (14.5 oz) cans chicken broth
+  1 (14.5 oz) can vegetable broth
+  \nicefrac{1}{2} tsp basil
+  \nicefrac{1}{2} tsp oregano
+  salt and pepper to taste
+\end{ingreds}
+
+\begin{method}
+  In a large pot over medium heat, melt butter.
+  Cook vegetables in butter until just tender, about 5 minutes.
+
+  Pour in broth and stir in other ingredients.
+  Boil, then reduce heat and simmer for 20 minutes before serving.
+\end{method}
+
+\recipe[Thick and creamy, this clam chowder pairs well with cold days.]{Clam Chowder}
+\serves{6-8}
+\preptime{15 minutes}
+\cooktime{35 minutes}
+\freezerfriendly
+\begin{ingreds}
+  \nicefrac{1}{2} lb thick cut bacon
+  6 small cans chopped clams
+  4 bottles clam juice
+  6-8 red potatoes, diced
+  2 cups heavy cream or half and half
+  3 tbsp cornstarch
+  1 stalk fresh rosemary, chopped finely
+  1 medium onion, diced
+  salt, pepper, garlic to taste
+\end{ingreds}
+
+\begin{method}
+  In a large saucepan, boil potatoes until soft.
+
+  Cut bacon into \nicefrac{1}{2} inch pieces,
+  place in large stockpot, and fry until crispy.
+  Remove bacon from pot onto paper towel.
+  Drain grease from pot, leaving enough to layer the bottom.
+
+  Cook onion in stockpot until soft.
+  Add clams, clam juice, and spices into stock pot;
+  cook on medium-high heat until warm.
+
+  Pour heavy cream into lidded cup and add cornstarch.
+  Shake well, then add to stockpot.
+  Stir until liquid begins to thicken.
+
+  Add potatoes to stockpot and simmer about 10-20 minutes.
+  Add bacon to chowder or use as a garnish when serving.
+\end{method}
+
+\recipe[Basic spaghetti sauce. A great way to put some extra veggies on a plate.]{Spaghetti Sauce}
+%\serves{}
+\freezerfriendly
+%\preptime{}
+%\cooktime{}
+\begin{ingreds}
+  1 lb ground beef
+  1 lb ground Italian sausage
+  2 cups carrots, shredded
+  1 zucchini, shredded
+  1 yellow squash, shredded
+  1 can olives, chopped
+  2 tsp garlic, minced
+  1 package mushrooms, finely chopped
+  \columnbreak
+  1 large onion, chopped
+  3 (14 oz) cans pasta sauce
+  Italian seasoning
+  crushed red pepper
+  chili powder
+  cajun seasoning
+  salt and pepper to taste
+\end{ingreds}
+
+\begin{method}
+  In a large pot, brown meat with onion and garlic; drain.
+  Return to heat and add carrots, zucchini, squash,
+  mushrooms, and olives, cooking until vegetables are tender.
+
+  Stir in pasta sauce one can at a time; season to taste.
+  Reduce heat to low and simmer until uniformly heated,
+  then remove from heat.
+
+  Serve over noodles.
+\end{method}
+\begin{tips}
+  If you're feeling adventurous, try serving
+  over spaghetti squash instead of pasta.
+  % anything special to do to it first?
+\end{tips}
+
+
+\chapter{Desserts and Drinks}
+\begin{comment}
+Meal planning isn't easy, so don't forget
+to reward yourself with one (or more) of these desserts
+and refreshing drinks.
+\end{comment}
+
+\recipe[Very easy to make -- you may even have all of the ingredients already.]{Banana Bread}
+\vegetarian
+%\serves{}
+\preptime{15 minutes}
+\cooktime[Bake time]{45 minutes}
+\begin{ingreds}
+  4 very ripe bananas, peeled
+  \nicefrac{1}{3} cup melted butter
+  1 tsp baking soda
+  pinch of salt
+  \nicefrac{3}{4} cup sugar
+  1 large egg, beaten
+  1 tsp vanilla extract
+  1 \nicefrac{1}{2} cups all-purpose flour
+  1 tsp cinnamon
+  crushed pecans
+\end{ingreds}
+
+\begin{method}[Preheat oven to \ftemp{350} and butter the baking pan.]
+  In a mixing bowl, mash the ripe bananas with
+  a fork until completely smooth.
+  Stir the melted butter into the mashed bananas.
+
+  Mix in the baking soda and salt.
+  Stir in the sugar, beaten egg, vanilla extract, and cinnamon.
+  Mix in the flour and any additions.
+
+  Pour the batter into the prepared pan,
+  and sprinkle crushed pecans atop the batter.
+  Bake for 45 minutes, or until a tester inserted
+  into the center comes out clean.
+
+  Remove from the oven and cool completely on a rack.
+  Remove the banana bread from the pan and serve.
+\end{method}
+\begin{tips}
+  Rather than chopping pecans manually (it'll take a while),
+  wrap them in a paper towel and use the side of
+  a flat knife to crush them.
+\end{tips}
+
+\recipe[An easy way to make cookies out of any cake mix.]{Cakies}
+\vegetarian
+%\preptime{}
+\cooktime[Bake time]{10 minutes}
+\begin{ingreds}
+  1 box cake mix
+  2 eggs
+  \nicefrac{1}{2} cup vegetable oil
+  nuts or fruit (optional)
+\end{ingreds}
+\begin{method}[Preheat oven to \ftemp{375}.]
+  Mix all ingredients together and roll into walnut-sized balls.
+  
+  Place 2 inches apart on ungreased cookie sheet.
+  
+  Bake 8--10 minutes. 
+  Remove and cool for 2 minutes.
+\end{method}
+
+
+\recipe[]{Creamy Pecan Pralines}
+\serves{18 pcs.}
+\begin{ingreds}
+  1 cup granulated sugar
+  1 cup (packed) light brown sugar
+  2 tablespoons light corn syrup
+  2 tablespoons butter
+  Pinch of salt
+  1/2 cup sweetened condensed milk
+  1 teaspoon vanilla extract
+  1 1/2 cups pecan pieces
+\end{ingreds}
+\begin{method}
+  Combine the sugar, brown sugar, corn syrup, butter, salt,
+  and condensed milk in a heavy saucepan over medium heat.
+
+  With a wooden spoon, stir until the sugar dissolves.
+  Continue to cook, stirring, until smooth and light brown,
+  about 8 minutes.
+
+  Add the vanilla and pecans and continue to cook,
+  stirring, until the mixture reaches \ftemp{234} to
+  \ftemp{240} on a candy thermometer or the soft ball stage,
+  that is, when a bit dropped into cold water
+  forms a soft ball that flattens.
+
+  Remove from the heat and drop by the spoonful onto wax paper.
+  Let cool.
+
+  Remove from the paper with a thin knife.
+  Pralines can be stored in an airtight container
+  at room temperature for up to 2 weeks.
+\end{method}
+\begin{tips}
+  If you attempt to roast the pecans yourself,
+  be sure to check them frequently!
+  They can and \emph{will} catch fire if left unattended
+  (we know from experience).
+\end{tips}
+
+\recipe[]{Easy Penuche*}
+\preptime{5 minutes}
+\cooktime{10 minutes}
+\serves{90 pcs.}
+\begin{ingreds}
+  1 cup unsalted butter
+  2 cups brown sugar, packed
+  \nicefrac{1}{2} cup whole milk
+  1 tsp vanilla extract
+  3 \nicefrac{1}{2} to 4 cups sifted powdered sugar
+  1 \nicefrac{1}{2} cups coarsely chopped pecans
+\end{ingreds}
+\begin{method}
+  Spray a 9x5" loaf pan with cooking spray
+  and line with parchment paper.
+  Set aside.
+
+  Melt butter in a heavy-bottomed 2-quart saucepan
+  over \linebreak medium-low heat, stirring as needed.
+  Stir in the brown sugar and cook for
+  2 minutes, stirring constantly.
+
+  Gently pour in the milk and, stirring constantly,
+  bring mixture to a boil.
+  Remove from heat and let cool for 30-40 minutes,
+  or until mixture is lukewarm or room temperature.
+
+  Stir in the vanilla extract.
+  Stir in powdered sugar, 1 to \nicefrac{1}{2} cup
+  at a time, stirring until completely combined.
+  Add powdered sugar just until the mixture is
+  thick and has the consistency of fudge.
+
+  Stir in pecans, then spoon into the prepared
+  loaf pan and top with additional pecans if desired.
+  Cover and cool until firm.
+
+  Cut into squares and store in the refrigerator
+  in an airtight container.
+\end{method}
+
+\recipe[Add an equal amount of unsweetened black tea for an extra refreshing drink.]{Lemonade}
+%\serves{}
+%\preptime{}
+%\cooktime{}
+\vegan
+\begin{ingreds}
+  1 \nicefrac{3}{4} cups white sugar
+  8 cups water
+  1 \nicefrac{1}{2} cups lemon juice
+\end{ingreds}
+
+\begin{method}
+  In a small saucepan, combine sugar and 1 cup water.
+  Bring to a boil and stir to dissolve sugar.
+  Allow to cool to room temperature, then cover
+  and refrigerate until chilled.
+
+  Remove seeds from lemon juice, leaving pulp (if applicable).
+  In pitcher, stir together chilled syrup, lemon juice,
+  and remaining 7 cups water.
+\end{method}
+\begin{tips}
+  If you don't want (or have time) to wait
+  for the syrup to chill slowly,
+  add ice to it instead.
+\end{tips}
+
+\begin{comment} % NOTE this is an example recipe that came with the format
+\recipe[This is a simple headnote that describes the product for the user. A simple but elegant dessert.]{Raspberry Chocolate Tiramisu (example)}
+\serves{4}
+\preptime{1 hour}
+\cooktime[Chill time]{1 \nicefrac{1}{2} hours}
+\vegetarian
+\freezerfriendly
+\begin{ingreds}
+  100ml Double Strength Coffee
+  400g Raspberries (blitzed)
+  200g Mascarpone
+  2 tbsp Sweetener
+  1 tsp Vanilla Extract
+  700g Vanilla Yogurt
+  15g Dark Chocolate (finely grated) and a really long one
+\columnbreak
+\ingredients[For the Crumble Mixture:]
+  80g Wholemeal Flour
+  80g Plain Flour
+  80g Butter (diced)
+  70g Demerara Sugar
+\end{ingreds}
+
+\begin{method}[Preheat the oven to Gas Mark 4, Electric \ctemp{180}, Fan \ctemp{160}.]
+  Stir the two kinds of flour together in a bowl,
+  add the butter and rub it into the flour.
+  When the mixture looks like breadcrumbs, mix in the brown sugar.
+  Lay the mixture on a shallow baking tray and bake for
+  25--30 minutes until golden brown.
+  Leave on the side to cool.
+
+  Mix together the mascarpone, sweetener, vanilla extract,
+  and three quarters of the chocolate.
+  Put half the crumble mixture in each of the glasses
+  and pour over half the quark mixture along with
+  half the raspberries.
+
+  Put the other half of the crumble mixture on top,
+  followed by the remaining quark mixture and raspberries.
+  Sprinkle over the last of the chocolate.
+  Chill for 3 hours before serving.
+\end {method}
+\showit[1.25in]{example-image-a}{This is a picture}
+\end{comment}
+
+%\backmatter
+%\chapter{Acknowledgements}
+
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{\indexname}
+\printindex
+
+\end{document}
