@@ -4,6 +4,6 @@ Those are just our initials.
 This is a collection of recipes we've compiled over time,
 specifically to aid in our meal prepping.
 
-Whole-number editions correspond to print-ready versions;
-editions with both a major and minor
-version number are intermediate digital editions.
+Versions are tagged with an edition-preview convention:
+1-3 means "1st edition, preview 3",
+and 2-final means "2nd edition, print-ready".
