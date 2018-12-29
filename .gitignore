@@ -1,0 +1,11 @@
+# synctex
+*.synctex.gz
+
+# intermediate files
+*.idx
+*.aux
+*.i[ln][dg]
+*.toc
+
+# error and other logs
+*.log
