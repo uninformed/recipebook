@@ -6,6 +6,10 @@
 *.aux
 *.i[ln][dg]
 *.toc
+*.out
 
 # error and other logs
 *.log
+
+# the working PDF
+book-working.pdf
